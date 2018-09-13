@@ -65,10 +65,11 @@ var pesoGauge = app.gauge.create({
   labelText: 'dentro do peso normal',
 });
 
-// Login Screen Demo
 $$('#view-home .calcular-imc-button').on('click', function () {
   var peso = $$('#view-home [name="peso"]').val();
   var altura = $$('#view-home [name="altura"]').val();
+  var idade = $$('#view-home [name="idade"]').val();
+  var sexo = $$('#view-home [name="sexo"]').val();
   
   if(peso == ''){
     app.dialog.alert('Informe o seu peso!');
@@ -76,72 +77,112 @@ $$('#view-home .calcular-imc-button').on('click', function () {
     if(altura == ''){
       app.dialog.alert('Informe a sua altura!');
     }else{
-      altura = altura/100;
-      var imc = (peso/(altura * altura));
-      var resultado = '';
-      if(imc.toFixed(2) < 16){
-        resultado = 'Magreza Grave';
+      if(idade == ''){
+        app.dialog.alert('Informe a sua idade!');
       }else{
-        if(imc.toFixed(2) >= 16 && imc.toFixed(2) < 17){
-          resultado = 'Magreza Moderada';
-        }else{ 
-          if(imc.toFixed(2) >= 17 && imc.toFixed(2) < 18.50){
-            resultado = 'Magreza Leve';
-          }else{ 
-            if(imc.toFixed(2) >= 18.50 && imc.toFixed(2) < 25){
-              resultado = 'Saudável';
-            }else{  
-              if(imc.toFixed(2) >= 25 && imc.toFixed(2) < 30){
-                resultado = 'Sobrepeso';
-              }else{
-                if(imc.toFixed(2) >= 30 && imc.toFixed(2) < 35){
-                  resultado = 'Obesidade Grau I';
-                } else{
-                  if(imc.toFixed(2) >= 35 && imc.toFixed(2) < 40){
-                    resultado = 'Obesidade Grau II (Severa)';
-                  } else{
-                    if(imc.toFixed(2) >= 40){
-                      resultado = 'Obesidade Grau III (Mórbida)';
-                    } 
-                  }
-                }
-              }
-            }  
-          }
-        }
-      }
-      var menorPeso = (18.50 * (altura * altura)).toFixed(2);
-      var maiorPeso = (25 * (altura * altura)).toFixed(2);
-      peso = peso * 1;
-      if(peso < menorPeso){
-        pesoGauge.update({
-          value: ((menorPeso - peso) / peso).toFixed(2),
-          valueText: (menorPeso - peso).toFixed(2) + 'KG',
-          labelText: 'abaixo do peso normal'
-
-        });
-      }else{
-        if(peso > maiorPeso){
-          pesoGauge.update({
-            value: ((peso - maiorPeso) / peso).toFixed(2),
-            valueText: (peso - maiorPeso).toFixed(2) + 'KG',
-            labelText: 'acima do peso normal'
-          });
-        }else{
-          pesoGauge.update({
-            value: 0.00,
-            valueText: '0 KG',
-            labelText: 'dentro do peso normal'
-          });
-        }
+        peso = peso * 1;
+        var taxaMetabolicaBasal = calcularTaxaMetabolicaBasal(peso, altura, idade, sexo);
         
-      }
+        altura = altura/100;
+        var imc = calcularIMC(peso, altura);
+        var resultado = resultadoIMC(imc);
+        var menorPeso = calcularMenorPesoNormal(altura);
+        var maiorPeso = calcularMaiorPesoNormal(altura);
+        atualizarGraficoComInformacao(peso, menorPeso, maiorPeso);
 
-      $$('#view-home .imc').html('IMC '+ (imc.toFixed(2)));
-      $$('#view-home .resultado-imc').html(resultado);
-      $$('#view-home .peso-ideal').html('O seu peso ideal está entre '+menorPeso+ ' e '+maiorPeso);
+        
+        
+        $$('#view-home .imc').html('IMC '+ (imc.toFixed(2)));
+        $$('#view-home .resultado-imc').html(resultado);
+        $$('#view-home .peso-ideal').html('O seu peso ideal está entre '+menorPeso+ ' e '+maiorPeso);
+        $$('#view-home .taxa-metabolica-basal').html(taxaMetabolicaBasal.toFixed(2) + 'Kcal/dia');
+      }
     }
   }
   
 });
 
+function calcularIMC(peso, altura){
+  var imc = (peso/(altura * altura));
+  return imc;
+}
+
+function resultadoIMC(imc){
+  var resultado = '';
+  if(imc.toFixed(2) < 16){
+    resultado = 'Magreza Grave';
+  }else{
+    if(imc.toFixed(2) >= 16 && imc.toFixed(2) < 17){
+      resultado = 'Magreza Moderada';
+    }else{ 
+      if(imc.toFixed(2) >= 17 && imc.toFixed(2) < 18.50){
+        resultado = 'Magreza Leve';
+      }else{ 
+        if(imc.toFixed(2) >= 18.50 && imc.toFixed(2) < 25){
+          resultado = 'Saudável';
+        }else{  
+          if(imc.toFixed(2) >= 25 && imc.toFixed(2) < 30){
+            resultado = 'Sobrepeso';
+          }else{
+            if(imc.toFixed(2) >= 30 && imc.toFixed(2) < 35){
+              resultado = 'Obesidade Grau I';
+            } else{
+              if(imc.toFixed(2) >= 35 && imc.toFixed(2) < 40){
+                resultado = 'Obesidade Grau II (Severa)';
+              } else{
+                if(imc.toFixed(2) >= 40){
+                  resultado = 'Obesidade Grau III (Mórbida)';
+                } 
+              }
+            }
+          }
+        }  
+      }
+    }
+  }
+  
+  return resultado;
+}
+
+function calcularMenorPesoNormal(altura){
+  return (18.50 * (altura * altura)).toFixed(2);
+}
+
+function calcularMaiorPesoNormal(altura){
+  return (25 * (altura * altura)).toFixed(2);
+}
+
+function atualizarGraficoComInformacao(peso, menorPeso, maiorPeso){
+  if(peso < menorPeso){
+    pesoGauge.update({
+      value: ((menorPeso - peso) / peso).toFixed(2),
+      valueText: (menorPeso - peso).toFixed(2) + 'KG',
+      labelText: 'abaixo do peso normal'
+    });
+  }else{
+    if(peso > maiorPeso){
+      pesoGauge.update({
+        value: ((peso - maiorPeso) / peso).toFixed(2),
+        valueText: (peso - maiorPeso).toFixed(2) + 'KG',
+        labelText: 'acima do peso normal'
+      });
+    }else{
+      pesoGauge.update({
+        value: 0.00,
+        valueText: '0 KG',
+        labelText: 'dentro do peso normal'
+      });
+    }
+    
+  }
+}
+
+function calcularTaxaMetabolicaBasal(peso, altura, idade, sexo){
+  var tmb = 0;
+  if(sexo == 'masculino'){
+    tmb = 88.36 + (13.4 * peso) + (4.8 * altura) - (5.7 * idade);
+  }else{
+    tmb = 447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * idade);
+  }
+  return tmb;
+}
