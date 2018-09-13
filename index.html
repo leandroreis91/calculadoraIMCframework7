@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#2196f3">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <title>Calcular IMC</title>
+  
+  <link rel="stylesheet" href="node_modules/framework7/css/framework7.min.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="app" class="color-theme-green">
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar"></div>
+    <!-- Left panel with cover effect-->
+    <div class="panel panel-left panel-cover theme-dark">
+      <div class="view">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="title">Left Panel</div>
+            </div>
+          </div>
+          <div class="page-content">
+            <div class="block">A saúde está a sua esquerda</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Views/Tabs container -->
+    <div class="views tabs ios-edges">
+      <!-- Tabbar for switching views-tabs -->
+      <div class="toolbar tabbar-labels toolbar-bottom-md">
+        <div class="toolbar-inner">
+          <a href="#view-home" class="tab-link tab-link-active">
+            <i class="icon f7-icons ios-only">cart</i>
+            <i class="icon f7-icons ios-only icon-ios-fill">cart_fill</i>
+            <i class="icon material-icons md-only">local_library</i>
+            <span class="tabbar-label">IMC</span>
+          </a>
+          <a href="#view-settings" class="tab-link">
+            <i class="icon f7-icons ios-only">settings</i>
+            <i class="icon f7-icons ios-only icon-ios-fill">settings_fill</i>
+            <i class="icon material-icons md-only">settings</i>
+            <span class="tabbar-label">Sobre</span>
+          </a>
+        </div>
+      </div>
+      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+      <div id="view-home" class="view view-main tab tab-active">
+        <!-- Page, data-name contains page name which can be used in page callbacks -->
+        <div class="page" data-name="home">
+          <!-- Top Navbar -->
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left">
+                <a href="#" class="link icon-only panel-open" data-panel="left">
+                  <i class="icon f7-icons ios-only">menu</i>
+                  <i class="icon material-icons md-only">menu</i>
+                </a>
+              </div>
+              <div class="title sliding">IMC</div>
+            </div>
+          </div>
+          <!-- Scrollable page content-->
+          <div class="page-content">
+            <div class="list">
+              <ul>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Peso</div>
+                    <div class="item-input-wrap">
+                      <input type="number" name="peso" placeholder="Qual seu peso em Kg?">
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Altura</div>
+                    <div class="item-input-wrap">
+                      <input type="number" name="altura" placeholder="Qual a sua altura em Cm? ">
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Idade</div>
+                    <div class="item-input-wrap">
+                      <input type="number" name="idade" placeholder="Qual a sua idade? ">
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <a class="item-link smart-select smart-select-init" data-open-in="popup">
+                    <select name="sexo">
+                      <option value="feminino" selected>Feminino</option>
+                      <option value="masculino">Masculino</option>
+                    </select>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title">Sexo</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                
+              </ul>
+              
+            </div>
+            <div class="list">
+              <p class="row">
+                <a href="#" class="col button button-round button-fill calcular-imc-button">Calcular IMC</a>
+              </p>
+            </div>
+            
+            <div class="block-title">Resultado IMC</div>
+            <div class="block block-strong">
+              <p class="imc">0.00</p>
+              <p class="resultado-imc"></p>
+            </div>
+            <div class="block-title">Resultado em Gráfico</div>
+            <div class="block block-strong">
+              <div class="row">
+                <div class="col text-align-center">
+                  <div class="gauge peso-gauge"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="block-title">Peso ideal</div>
+            <div class="block block-strong">
+              <p class="peso-ideal">0.00</p>
+            </div>
+            <div class="list">
+              <ul>
+                <li>
+                  <a href="/pesoIdeal/" class="item-content item-link">
+                    <div class="item-inner">
+                      <div class="item-title">Como chegar no peso ideal?</div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings View -->
+      <div id="view-settings" class="view tab">
+        <!-- Settings page will be loaded here dynamically from /settings/ route -->
+      </div>
+    </div>
+  </div>
+  <!-- Cordova -->
+  <!--
+    <script src="cordova.js"></script>
+  -->
+  
+  <!-- Framework7 library -->
+  <script src="node_modules/framework7/js/framework7.min.js"></script>
+  
+  <!-- App routes -->
+  <script src="js/routes.js"></script>
+  
+  <!-- Your custom app scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
