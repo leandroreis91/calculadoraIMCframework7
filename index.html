@@ -16,20 +16,27 @@
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-  <div id="app" class="color-theme-green">
+  <div id="app" class="color-theme-black">
     <!-- Status bar overlay for fullscreen mode-->
     <div class="statusbar"></div>
     <!-- Left panel with cover effect-->
-    <div class="panel panel-left panel-cover theme-dark">
+    <div class="panel panel-left panel-cover theme-white">
       <div class="view">
         <div class="page">
           <div class="navbar">
             <div class="navbar-inner">
-              <div class="title">Left Panel</div>
+              <div class="title">Dicas de Saúde</div>
             </div>
           </div>
           <div class="page-content">
-            <div class="block">A saúde está a sua esquerda</div>
+              <div class="block-title">Não desista</div>
+              <div class="block block-strong">
+                <p>Siga firme na dieta porque você precisa ser saudável.</p>
+              </div>
+              <div class="block-title">Coma mais alface</div>
+              <div class="block block-strong">
+                <p>Estudos afirmam, comer somente alface emagrece.</p>
+              </div>
           </div>
         </div>
       </div>
@@ -46,7 +53,7 @@
             <i class="icon material-icons md-only">insert_chart</i>
             <span class="tabbar-label">IMC</span>
           </a>
-          <a href="#view-settings" class="tab-link">
+          <a href="#view-sobre" class="tab-link">
             <i class="icon f7-icons ios-only">info</i>
             <i class="icon f7-icons ios-only icon-ios-fill">info_fill</i>
             <i class="icon material-icons md-only">info</i>
@@ -63,8 +70,8 @@
             <div class="navbar-inner">
               <div class="left">
                 <a href="#" class="link icon-only panel-open" data-panel="left">
-                  <i class="icon f7-icons ios-only">menu</i>
-                  <i class="icon material-icons md-only">menu</i>
+                  <i class="icon f7-icons ios-only">notifications_none</i>
+                  <i class="icon material-icons md-only">notifications_none</i>
                 </a>
               </div>
               <div class="title sliding">IMC</div>
@@ -161,9 +168,9 @@
         </div>
       </div>
       
-      <!-- Settings View -->
-      <div id="view-settings" class="view tab">
-        <!-- Settings page will be loaded here dynamically from /settings/ route -->
+      <!-- Sobre View -->
+      <div id="view-sobre" class="view tab">
+        <!-- Página Sobre será carregada aqui dinamicamente através da rota /sobre/ -->
       </div>
     </div>
   </div>
